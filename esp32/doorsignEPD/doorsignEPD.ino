@@ -6,7 +6,7 @@
 
 // Define your display type here: 2.9, 4.2 (bw and bwr) or 7.5 (bw or bwr) inches are supported:
 // Default: 4.2bwr
-#define DISPLAY_TYPE '4.2bwr'
+#define DISPLAY_TYPE '7.5'
 
 // Default 5
 #define CHIP_SELECT 5
@@ -190,6 +190,7 @@ void drawPixels(char *data, size_t len, boolean start){
   }
 
   Serial.println(String("Printing ") + len + " Bytes to the screen");
+  
   for (size_t i=0; i<len; i++){
 
     if (hasRed == true) {
@@ -241,7 +242,7 @@ void onConnectHandler(void *r, AsyncClient *client){
   if (STATUS_PIN >= 0){
     digitalWrite(5, HIGH);
   }
-  String url =  iot.configuration.get("ImageAddress") + "&display=" + displayType;
+  String url =  iot.configuration.get("ImageAddress");
   String query = String("GET ") + url + " HTTP/1.1\r\n" +
                  "Host: " + iot.configuration.get("ImageHost") + "\r\n" +
                  "Connection: close\r\n\r\n";
@@ -372,7 +373,7 @@ void loop() {
     !tcpClientConnectionInProgress &&
     !requestDoneInPeriod
     ) {
-      const int httpPort = 80;
+      const int httpPort = 3000;
       const char* host = iot.configuration.get("ImageHost").c_str();
       
       if (!client.connect(host, httpPort)) {
